@@ -6,7 +6,7 @@
 
 _✨ 作者：[SatenShiroya](https://github.com/SatenShiroya)✨_
 
-[![Plugin Version](https://img.shields.io/badge/Version-V1.0.0-blue.svg)](https://github.com/SatenShiroya/astrbot_plugin_neteasecloud_music)
+[![Plugin Version](https://img.shields.io/badge/Version-V1.1.0-blue.svg)](https://github.com/SatenShiroya/astrbot_plugin_neteasecloud_music)
 [![AstrBot](https://img.shields.io/badge/AstrBot-Plugin-ff69b4)](https://github.com/AstrBotDevs/AstrBot)
 [![License](https://img.shields.io/badge/License-AGPL%203.0-green.svg)](LICENSE)
 
