@@ -4,14 +4,15 @@ from astrbot.api.event import filter
 from astrbot.core.message.message_event_result import MessageEventResult
 from astrbot.core.platform.sources.aiocqhttp.aiocqhttp_message_event import AiocqhttpMessageEvent
 from astrbot.api.star import Star, register, Context
-from astrbot.api import logger
+from astrbot.api import logger, AstrBotConfig
 
 
-@register("astrbot_plugin_NetEaseCloud_Music", "SatenShiroya", "网易云音乐点歌插件：支持 LLM 自动点歌", "1.0.0")
+@register("astrbot_plugin_NetEaseCloud_Music", "SatenShiroya", "网易云音乐点歌插件：支持 LLM 自动点歌", "1.1.0")
 class MusicPlugin(Star):
-    def __init__(self, context: Context):
+    def __init__(self, context: Context, config: AstrBotConfig):
         super().__init__(context)
         self.session = None  # 初始化为 None
+        self.play_success_message_template = config.get("play_success_message_template","🎵已为您播放《{title}》")
 
     async def initialize(self):
         """插件初始化：创建 aiohttp 会话"""
@@ -113,13 +114,16 @@ class MusicPlugin(Star):
                 else:
                     payload["group_id"] = event.get_group_id()
                     await event.bot.call_action("send_group_msg", **payload)
-
+                
+                template = self.play_success_message_template
                 logger.info(f"已发送网易云卡片: {title} - {artist} (ID: {song_id})")
-                yield event.plain_result(f"🎵 已为你播放《{title}》")
+                if template.strip():
+                    message = template.format(title=title, artist=artist)
+                    yield event.plain_result(f"{message}")
                 return
             except Exception as e:
                 logger.error(f"发送音乐卡片失败: {e}")
-                yield event.plain_result("抱歉，发送音乐卡片失败了")
+                yield event.plain_result(f"抱歉，发送音乐卡片失败了")
                 return
 
         # 其他平台：发音频链接

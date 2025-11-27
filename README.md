@@ -19,21 +19,35 @@ _✨ 作者：[SatenShiroya](https://github.com/SatenShiroya)✨_
 
 ## ⌨️ _使用说明_
 
-- 直接自然语言点歌，例如“我想听孙燕姿的绿光”或者“我想听稻香”，AI会自动搜索网易云列表第一首返回播放
+- 直接使用自然语言点歌，例如：
+  - “我想听孙燕姿的绿光”
+  - “我想听稻香”
+- AI 会自动搜索网易云音乐列表中的第一首结果并返回播放卡片。
 
 ## 📌 _效果_
 
-- ![效果图，图裂了就来仓库看](effect.jpg)
+<div align="center">
+  <img src="effect.jpg" alt="效果图，图裂了就来仓库看">
+</div>
 
 ## 📦 _安装_
 
-- 可以直接在Astrbot的插件市场搜索astrbot_plugin_NetEaseCloud_Music，点击安装，耐心等待安装完成即可
-- 或者下载zip文件到本地，在Astrbot中通过压缩包手动安装  
+ - **推荐方式**：在 AstrBot 的插件市场中搜索 `astrbot_plugin_NetEaseCloud_Music`，点击安装并等待完成。
+ - **手动安装**：下载 ZIP 文件，在 AstrBot 管理界面中通过“本地压缩包”方式上传安装。
 
-## 📝 _版本变更履历_
+## 📝 _版本变更履历_ 
 
-### _V 1.0_
-- 首次发布
+<details>
+<summary style="padding-left: 1.6em;"><em>点此展开显示</em></summary>
+
+- ### _V 1.1.0_
+  - 新增自定义点歌成功回复配置项
+
+
+- ### _V 1.0.0_
+  - 首次发布
+
+</details>
 
 ## 🔗 _相关链接_
 
