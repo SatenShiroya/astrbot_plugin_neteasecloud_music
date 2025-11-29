@@ -6,7 +6,7 @@
 
 _✨ 作者：[SatenShiroya](https://github.com/SatenShiroya)✨_
 
-[![Plugin Version](https://img.shields.io/badge/Version-V1.1.0-blue.svg)](https://github.com/SatenShiroya/astrbot_plugin_neteasecloud_music)
+[![Plugin Version](https://img.shields.io/badge/Version-V1.2.0-blue.svg)](https://github.com/SatenShiroya/astrbot_plugin_neteasecloud_music)
 [![AstrBot](https://img.shields.io/badge/AstrBot-Plugin-ff69b4)](https://github.com/AstrBotDevs/AstrBot)
 [![License](https://img.shields.io/badge/License-AGPL%203.0-green.svg)](LICENSE)
 
@@ -39,6 +39,13 @@ _✨ 作者：[SatenShiroya](https://github.com/SatenShiroya)✨_
 
 <details>
 <summary style="padding-left: 1.6em;"><em>点此展开显示</em></summary>
+
+- ### _V 1.2.0_
+  - 为网易云搜索增加自动重试机制，提升稳定性。
+  - 移除已失效的非 QQ 平台的音频链接兜底措施，仅保留 QQ 音乐卡片支持。
+  - 非 QQ 平台现返回友好提示，引导用户在 QQ 中使用点歌功能。
+  - 增强搜索结果解析的健壮性，防止因数据异常导致崩溃。
+
 
 - ### _V 1.1.0_
   - 新增自定义点歌成功回复配置项
