@@ -1,8 +1,15 @@
 {
-    "play_success_message_template": {
+  "play_success_message_template": {
     "type": "string",
     "description": "自定义点歌成功时的回复",
-    "hint": "支持使用变量：{title}（歌名）、{artist}（歌手），例如：已为你播放《{title}》--{artist}，留空则不回复",
+    "hint": "支持变量：{title}（歌名）、{artist}（歌手），例如：已为你播放《{title}》--{artist}，留空则不回复",
     "default": "🎵已为您播放《{title}》"
+  },
+
+  "proxy_url": {
+    "type": "string",
+    "description": "HTTP/HTTPS/SOCKS 代理地址（可选）",
+    "hint": "格式示例：http://ip:port 或 socks5://user:pass@ip:port。留空则直连。",
+    "default": ""
   }
 }

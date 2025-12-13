@@ -7,38 +7,78 @@ from astrbot.api.star import Star, register, Context
 from astrbot.api import logger, AstrBotConfig
 
 
-@register("astrbot_plugin_NetEaseCloud_Music", "SatenShiroya", "网易云音乐点歌插件：支持 LLM 自动点歌", "1.2.0")
+@register("astrbot_plugin_NetEaseCloud_Music", "SatenShiroya", "网易云音乐点歌插件：支持 LLM 自动点歌", "1.3.0")
 class MusicPlugin(Star):
     def __init__(self, context: Context, config: AstrBotConfig):
         super().__init__(context)
-        self.session = None  # 初始化为 None
+        self.session = None
+
         self.play_success_message_template = config.get("play_success_message_template","🎵已为您播放《{title}》")
 
+        self.proxy_url = config.get("proxy_url", "")
+
     async def initialize(self):
-        """插件初始化：创建 aiohttp 会话"""
-        self.session = aiohttp.ClientSession()
+        """初始化 aiohttp ClientSession，根据代理类型创建连接器"""
+        connector = None
+
+        if self.proxy_url.startswith(("socks4://", "socks5://")):
+            try:
+                from aiohttp_socks import ProxyConnector
+                connector = ProxyConnector.from_url(self.proxy_url)
+                logger.info("[NetEaseMusic] 已启用 SOCKS 代理连接器")
+            except ImportError:
+                logger.error(
+                    "[NetEaseMusic] 检测到 SOCKS 代理，但未安装依赖 'aiohttp-socks'！\n"
+                    "请运行: pip install aiohttp-socks\n"
+                    "将回退到无代理模式。"
+                )
+                self.proxy_url = "" 
+
+        self.session = aiohttp.ClientSession(connector=connector, trust_env=False)
 
     async def _netease_request(self, url: str, data: dict = None, method: str = "GET"):
-        """网易云统一请求方法"""
-        headers_post = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) "
-                          "Chrome/55.0.2883.87 UBrowser/6.2.4098.3 Safari/537.36"
+        """统一请求方法，自动应用代理（如配置）"""
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+            "Referer": "https://music.163.com/",
+            "Origin": "https://music.163.com",
+            "Accept": "application/json, text/plain, */*",
+            "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
         }
-        headers_get = {"referer": "http://music.163.com"}
-        cookies = {"appver": "2.0.2"}
+        cookies = {"appver": "2.9.11", "os": "pc"}
 
-        if method.upper() == "POST":
-            async with self.session.post(
-                url, headers=headers_post, cookies=cookies, data=data or {}
-            ) as resp:
-                ct = resp.headers.get("Content-Type", "")
-                if "application/json" in ct:
-                    return await resp.json()
-                else:
-                    return json.loads(await resp.text())
-        else:
-            async with self.session.get(url, headers=headers_get, cookies=cookies) as resp:
-                return await resp.json()
+        proxy = (
+            self.proxy_url
+            if self.proxy_url and self.proxy_url.startswith(("http://", "https://"))
+            else None
+        )
+
+        timeout = aiohttp.ClientTimeout(total=10)
+        try:
+            if method.upper() == "POST":
+                async with self.session.post(
+                    url,
+                    headers=headers,
+                    cookies=cookies,
+                    data=data or {},
+                    proxy=proxy,
+                    timeout=timeout,
+                ) as resp:
+                    text = await resp.text()
+                    return json.loads(text)
+            else:
+                async with self.session.get(
+                    url,
+                    headers=headers,
+                    cookies=cookies,
+                    proxy=proxy,
+                    timeout=timeout,
+                ) as resp:
+                    text = await resp.text()
+                    return json.loads(text)
+        except Exception as e:
+            logger.error(f"[NetEaseMusic] 请求失败 (URL: {url}, 代理: {proxy}): {e}")
+            raise
 
     async def netease_search(self, keyword: str, limit: int = 5) -> list[dict]:
         """搜索网易云歌曲（带重试）"""
@@ -142,8 +182,7 @@ class MusicPlugin(Star):
             yield event.plain_result(f"抱歉，发送音乐卡片失败了")
             return
 
-    
     async def terminate(self):
-        """插件销毁：关闭会话"""
+        """插件销毁：关闭 aiohttp 会话"""
         if self.session:
             await self.session.close()

@@ -6,7 +6,7 @@
 
 _✨ 作者：[SatenShiroya](https://github.com/SatenShiroya)✨_
 
-[![Plugin Version](https://img.shields.io/badge/Version-V1.2.0-blue.svg)](https://github.com/SatenShiroya/astrbot_plugin_neteasecloud_music)
+[![Plugin Version](https://img.shields.io/badge/Version-V1.3.0-blue.svg)](https://github.com/SatenShiroya/astrbot_plugin_neteasecloud_music)
 [![AstrBot](https://img.shields.io/badge/AstrBot-Plugin-ff69b4)](https://github.com/AstrBotDevs/AstrBot)
 [![License](https://img.shields.io/badge/License-AGPL%203.0-green.svg)](LICENSE)
 
@@ -14,15 +14,33 @@ _✨ 作者：[SatenShiroya](https://github.com/SatenShiroya)✨_
 
 ## ✨ _介绍_
 
-- 一个简单的Astrbot插件，实现通过自然语言调用AI进行网易云点歌
-- 仅适用于QQ平台
+- 一个轻量级 AstrBot 插件，支持通过自然语言让 AI 自动为你在 **QQ 中点播网易云音乐**。
+- 利用 LLM 工具调用能力，智能识别歌名与歌手，自动搜索并发送官方音乐卡片。
+- **特别优化海外用户支持**：可配置 HTTP/SOCKS 代理绕过地域限制。
+
+> ⚠️ 注意：本插件**仅在 QQ 平台生效**（需配合 NapCat/QQNT 协议端），其他平台将返回友好提示。
 
 ## ⌨️ _使用说明_
 
 - 直接使用自然语言点歌，例如：
   - “我想听孙燕姿的绿光”
   - “我想听稻香”
-- AI 会自动搜索网易云音乐列表中的第一首结果并返回播放卡片。
+- AI 会自动调用工具，搜索网易云音乐，并在 QQ 聊天中发送**官方音乐卡片**（带封面、播放按钮）。
+
+## 🌍 _海外用户必看_
+
+- 如果你部署在海外服务器，可能会遇到“找不到歌曲”或返回加密数据的问题。  
+- **解决方案**：在插件配置中填写中国大陆的代理地址（HTTP 或 SOCKS）。
+
+- 支持格式示例：
+  - `http://1.2.3.4:8080`
+  - `http://user:pass@1.2.3.4:8080`
+  - `socks5://1.2.3.4:1080`
+- 使用 SOCKS 代理需额外安装依赖： 
+   
+> ```bash
+> pip install aiohttp-socks
+> ```
 
 ## 📌 _效果_
 
@@ -39,6 +57,9 @@ _✨ 作者：[SatenShiroya](https://github.com/SatenShiroya)✨_
 
 <details>
 <summary style="padding-left: 1.6em;"><em>点此展开显示</em></summary>
+
+- ### _V 1.3.0_（当前版本）
+  - 新增 `proxy_url` 配置项，支持 HTTP/HTTPS/SOCKS 代理，提升海外用户可用性
 
 - ### _V 1.2.0_
   - 为网易云搜索增加自动重试机制，提升稳定性。
