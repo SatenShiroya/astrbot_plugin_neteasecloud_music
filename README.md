@@ -6,7 +6,7 @@
 
 _✨ 作者：[SatenShiroya](https://github.com/SatenShiroya)✨_
 
-[![Plugin Version](https://img.shields.io/badge/Version-V1.3.0-blue.svg)](https://github.com/SatenShiroya/astrbot_plugin_neteasecloud_music)
+[![Plugin Version](https://img.shields.io/badge/Version-V1.4.0-blue.svg)](https://github.com/SatenShiroya/astrbot_plugin_neteasecloud_music)
 [![AstrBot](https://img.shields.io/badge/AstrBot-Plugin-ff69b4)](https://github.com/AstrBotDevs/AstrBot)
 [![License](https://img.shields.io/badge/License-AGPL%203.0-green.svg)](LICENSE)
 
@@ -58,7 +58,10 @@ _✨ 作者：[SatenShiroya](https://github.com/SatenShiroya)✨_
 <details>
 <summary style="padding-left: 1.6em;"><em>点此展开显示</em></summary>
 
-- ### _V 1.3.0_（当前版本）
+- ### _V 1.4.0_（当前版本）
+  - 新增 `qq_platform` 配置项，可强制让bot在任何平台发送音乐卡片，不支持平台可能失败
+
+- ### _V 1.3.0_
   - 新增 `proxy_url` 配置项，支持 HTTP/HTTPS/SOCKS 代理，提升海外用户可用性
 
 - ### _V 1.2.0_

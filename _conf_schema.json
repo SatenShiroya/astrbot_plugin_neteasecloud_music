@@ -11,5 +11,12 @@
     "description": "HTTP/HTTPS/SOCKS 代理地址（可选）",
     "hint": "格式示例：http://ip:port 或 socks5://user:pass@ip:port。留空则直连。",
     "default": ""
+  },
+
+  "is_qq_platform": {
+    "type": "bool",
+    "description": "判断是否QQ平台开关",
+    "hint": "关闭后强制使Bot在任何平台发送音乐卡片，可能出现错误。",
+    "default": true
   }
 }

@@ -7,7 +7,7 @@ from astrbot.api.star import Star, register, Context
 from astrbot.api import logger, AstrBotConfig
 
 
-@register("astrbot_plugin_NetEaseCloud_Music", "SatenShiroya", "网易云音乐点歌插件：支持 LLM 自动点歌", "1.3.0")
+@register("astrbot_plugin_NetEaseCloud_Music", "SatenShiroya", "网易云音乐点歌插件：支持 LLM 自动点歌", "1.4.0")
 class MusicPlugin(Star):
     def __init__(self, context: Context, config: AstrBotConfig):
         super().__init__(context)
@@ -16,6 +16,8 @@ class MusicPlugin(Star):
         self.play_success_message_template = config.get("play_success_message_template","🎵已为您播放《{title}》")
 
         self.proxy_url = config.get("proxy_url", "")
+        
+        self.is_qq_platform = config.get("is_qq_platform",True)
 
     async def initialize(self):
         """初始化 aiohttp ClientSession，根据代理类型创建连接器"""
@@ -148,13 +150,14 @@ class MusicPlugin(Star):
         artist = first["artists"]
 
         # 非 QQ 平台：发送文本提示
-        if not isinstance(event, AiocqhttpMessageEvent):
-            yield event.plain_result(
-                f"🎵 找到了《{title}》- {artist}\n"
-                "⚠️ 当前平台不支持直接播放网易云音乐。\n"
-                "建议在 QQ 中使用本功能以获得最佳体验！"
-            )
-            return
+        if self.is_qq_platform:
+            if not isinstance(event, AiocqhttpMessageEvent):
+                yield event.plain_result(
+                    f"🎵 找到了《{title}》- {artist}\n"
+                    "⚠️ 当前平台不支持直接播放网易云音乐。\n"
+                    "建议在 QQ 中使用本功能以获得最佳体验！"
+                )
+                return
 
         # QQ 平台：发送音乐卡片
         try:
