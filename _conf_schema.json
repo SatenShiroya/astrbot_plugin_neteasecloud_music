@@ -71,6 +71,12 @@
         "description": "列表选择模式下，取消操作时的回复",
         "hint": "不支持变量。",
         "default": "回复内容非法，已取消点歌操作"
+      },
+      "timeout_auto_play": {
+        "type": "string",
+        "description": "列表选择模式下，用户超时未选择时的回复",
+        "hint": "支持变量：{title}（第一首歌名）。",
+        "default": "点歌超时，已为您自动播放第一首：《{title}》"
       }
     }
   }

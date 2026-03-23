@@ -12,7 +12,7 @@ from astrbot.core.message.components import Plain
 
 USER_STATES: Dict[int, Dict[str, Any]] = {}
 
-@register("astrbot_plugin_NetEaseCloud_Music", "SatenShiroya", "网易云音乐点歌插件：支持列表选择", "2.0.0")
+@register("astrbot_plugin_NetEaseCloud_Music", "SatenShiroya", "网易云音乐点歌插件：支持列表选择", "2.1.0")
 class MusicPlugin(Star):
     def __init__(self, context: Context, config: AstrBotConfig):
         super().__init__(context)
@@ -30,6 +30,9 @@ class MusicPlugin(Star):
         )
         self.select_cancel_template = templates_config.get(
             "select_cancel", "回复内容非法，已取消点歌操作"
+        )
+        self.timeout_auto_play_template = templates_config.get(
+            "timeout_auto_play", "点歌超时，已为您自动播放第一首：《{title}》"
         )
 
         network_config = config.get("network", {})
@@ -170,10 +173,35 @@ class MusicPlugin(Star):
             del USER_STATES[user_id]
 
     def _on_selection_timeout(self, user_id: int):
-        """处理选择超时 (回调函数)"""
-        if user_id in USER_STATES:
-            logger.info(f"用户 {user_id} 点歌选择超时，已清除状态。")
+        """处理选择超时：自动播放第一首歌，并可选发送提示"""
+        if user_id not in USER_STATES:
+            return
+
+        state = USER_STATES[user_id]
+        songs = state.get("songs")
+        event = state.get("event")
+
+        if not songs or not event:
             self._cancel_user_state(user_id)
+            return
+
+        first_song = songs[0]
+        logger.info(f"用户 {user_id} 点歌选择超时，自动播放第一首：《{first_song['name']}》")
+
+        self._cancel_user_state(user_id)
+
+        if self.timeout_auto_play_template.strip():
+            try:
+                msg_text = self.timeout_auto_play_template.format(
+                    title=first_song["name"],
+                    artist=first_song["artists"]
+                )
+            except KeyError as e:
+                logger.warning(f"超时自动播放模板变量缺失：{e}，使用原始模板")
+                msg_text = self.timeout_auto_play_template 
+            asyncio.create_task(event.send(event.plain_result(msg_text)))
+
+        asyncio.create_task(self._send_music_card(event, first_song))
 
     async def _send_music_card(self, event: AiocqhttpMessageEvent, song_info: dict) -> dict:
         """发送音乐卡片"""
@@ -271,6 +299,7 @@ class MusicPlugin(Star):
             USER_STATES[user_id] = {
                 "state": "waiting_selection",
                 "songs": songs,
+                "event": event,
                 "timer": timer
             }
             

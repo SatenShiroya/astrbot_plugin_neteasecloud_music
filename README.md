@@ -6,7 +6,7 @@
 
 _✨ 作者：[SatenShiroya](https://github.com/SatenShiroya)✨_
 
-[![Plugin Version](https://img.shields.io/badge/Version-V2.0.0-blue.svg)](https://github.com/SatenShiroya/astrbot_plugin_neteasecloud_music)
+[![Plugin Version](https://img.shields.io/badge/Version-V2.1.0-blue.svg)](https://github.com/SatenShiroya/astrbot_plugin_neteasecloud_music)
 [![AstrBot](https://img.shields.io/badge/AstrBot-Plugin-ff69b4)](https://github.com/AstrBotDevs/AstrBot)
 [![License](https://img.shields.io/badge/License-AGPL%203.0-green.svg)](LICENSE)
 
@@ -58,7 +58,10 @@ _✨ 作者：[SatenShiroya](https://github.com/SatenShiroya)✨_
 <details>
 <summary style="padding-left: 1.6em;"><em>点此展开显示</em></summary>
 
-- ### _V 2.0.0_（当前版本）
+- ### _V 2.1.0_（当前版本）
+  - 点歌超时后行为修改为自动发送第一首
+
+- ### _V 2.0.0_
   - 新增`music_select`配置项，开启后可以让bot优先回复播放列表，再回复序号选择准确歌曲
   - 新增`select_wait_time``search_limit`配置项，用户可以自行选择搜索歌曲返回数量和回复结果等待时间
   - 使用嵌套配置项以优化配置页面显示效果
