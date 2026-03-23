@@ -1,22 +1,77 @@
 {
-  "play_success_message_template": {
-    "type": "string",
-    "description": "自定义点歌成功时的回复",
-    "hint": "支持变量：{title}（歌名）、{artist}（歌手），例如：已为你播放《{title}》--{artist}，留空则不回复",
-    "default": "🎵已为您播放《{title}》"
+  "features": {
+    "type": "object",
+    "description": "功能开关配置",
+    "hint": "控制插件的特定功能行为。",
+    "items": {
+      "music_select": {
+        "type": "bool",
+        "description": "是否开启歌曲选择功能",
+        "hint": "开启后，搜索多首歌曲时会让用户选择。",
+        "default": false
+      },
+      "select_wait_time": {
+        "type": "int",
+        "description": "歌曲选择等待时间（秒）",
+        "hint": "用户在选择列表中的等待超时时间，默认30秒。（填写时间过短可能来不及选择，时间过长则占用资源。）",
+        "default": 30
+      },
+      "search_limit": {
+        "type": "int",
+        "description": "单次搜索最大返回歌曲数量",
+        "hint": "范围 1-10。数值越大搜索越慢，但选择更多。默认 5。",
+        "default": 5
+      }
+    }
   },
-
-  "proxy_url": {
-    "type": "string",
-    "description": "HTTP/HTTPS/SOCKS 代理地址（可选）",
-    "hint": "格式示例：http://ip:port 或 socks5://user:pass@ip:port。留空则直连。",
-    "default": ""
+  "network": {
+    "type": "object",
+    "description": "网络与代理配置",
+    "hint": "配置代理地址及平台兼容性。",
+    "items": {
+      "proxy_url": {
+        "type": "string",
+        "description": "HTTP/HTTPS/SOCKS 代理地址",
+        "hint": "格式示例：http://ip:port 或 socks5://user:pass@ip:port。留空则直连。",
+        "default": ""
+      },
+      "is_qq_platform": {
+        "type": "bool",
+        "description": "是否QQ平台开关",
+        "hint": "关闭后强制使Bot在任何平台发送音乐卡片，可能出现错误。",
+        "default": true
+      }
+    }
   },
-
-  "is_qq_platform": {
-    "type": "bool",
-    "description": "判断是否QQ平台开关",
-    "hint": "关闭后强制使Bot在任何平台发送音乐卡片，可能出现错误。",
-    "default": true
+  "message_templates": {
+    "type": "object",
+    "description": "自定义回复消息模板配置",
+    "hint": "在此处配置插件的各种回复语，支持变量替换，内容留空则不回复结果。",
+    "items": {
+      "play_success": {
+        "type": "string",
+        "description": "直接点歌成功时的回复",
+        "hint": "支持变量：{title}（歌名）、{artist}（歌手）。",
+        "default": "已为您播放《{title}》"
+      },
+      "select_success": {
+        "type": "string",
+        "description": "列表选择模式下，选对歌曲时的回复",
+        "hint": "支持变量：{index}（序号）、{title}（歌名）、{artist}（歌手）。",
+        "default": "这就为您播放第 {index} 首：《{title}》"
+      },
+      "select_error": {
+        "type": "string",
+        "description": "列表选择模式下，输入序号错误时的回复",
+        "hint": "支持变量：{max_idx}（最大可选序号,回复内容与下方search_limit相关）。",
+        "default": "点歌序号只能在 1 到 {max_idx} 之间，请重新输入"
+      },
+      "select_cancel": {
+        "type": "string",
+        "description": "列表选择模式下，取消操作时的回复",
+        "hint": "不支持变量。",
+        "default": "回复内容非法，已取消点歌操作"
+      }
+    }
   }
 }
